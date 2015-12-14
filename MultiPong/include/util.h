@@ -1,5 +1,7 @@
-#ifndef MULTIPONGUTIL_H
-#define MULTIPONGUTIL_H
+#pragma once
+#ifndef UTIL_H
+#define UTIL_H
+
 
 #include <SFML/Graphics.hpp>
 
@@ -9,11 +11,11 @@ sf::Vector2f operator/(sf::Vector2<T> a, float b)
 	return sf::Vector2f(a.x / b, a.y / b);
 }
 
-template <class T>
-sf::Vector2f operator*(sf::Vector2<T> a, float b)
-{
-	return sf::Vector2f(a.x * b, a.y * b);
-}
+//template <class T>
+//sf::Vector2f operator*(sf::Vector2<T> a, float b)
+//{
+//	return sf::Vector2f(a.x * b, a.y * b);
+//}
 
 template <class T>
 float v2fMagnitude(sf::Vector2<T> a)
@@ -27,5 +29,12 @@ T clamp(T val, T min, T max)
 	return std::max(min, std::min(val, max));
 }
 
+static sf::Vector2f CirclePos(float degrees)
+{
+	float rad = degrees * 3.14159265f / 180.0f;
+	float x = cos(rad);
+	float y = sin(rad);
+	return sf::Vector2f(x, y);
+}
 
-#endif // !UTIL_H
+#endif

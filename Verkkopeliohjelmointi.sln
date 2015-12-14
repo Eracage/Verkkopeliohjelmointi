@@ -15,9 +15,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketServer", "SocketServe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Threads", "Threads\Threads.vcxproj", "{BD5DE565-0EEA-42CA-BB91-8C2DCB3C5ED4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MultiPong", "MultiPong\MultiPong.vcxproj", "{238A86C0-E77F-43DF-B35D-7B21E5E2A72A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MultiPong", "MultiPong\MultiPong\MultiPong.vcxproj", "{238A86C0-E77F-43DF-B35D-7B21E5E2A72A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MultiPongServer", "MultiPongServer\MultiPongServer.vcxproj", "{2AEA478E-D236-4160-B30C-6C1404309697}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MultiPongServer", "MultiPong\MultiPongServer\MultiPongServer.vcxproj", "{AE262866-D16D-4177-82EB-337A68EE5922}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,14 +71,14 @@ Global
 		{238A86C0-E77F-43DF-B35D-7B21E5E2A72A}.Release|Win32.Build.0 = Release|Win32
 		{238A86C0-E77F-43DF-B35D-7B21E5E2A72A}.Release|x64.ActiveCfg = Release|x64
 		{238A86C0-E77F-43DF-B35D-7B21E5E2A72A}.Release|x64.Build.0 = Release|x64
-		{2AEA478E-D236-4160-B30C-6C1404309697}.Debug|Win32.ActiveCfg = Debug|Win32
-		{2AEA478E-D236-4160-B30C-6C1404309697}.Debug|Win32.Build.0 = Debug|Win32
-		{2AEA478E-D236-4160-B30C-6C1404309697}.Debug|x64.ActiveCfg = Debug|x64
-		{2AEA478E-D236-4160-B30C-6C1404309697}.Debug|x64.Build.0 = Debug|x64
-		{2AEA478E-D236-4160-B30C-6C1404309697}.Release|Win32.ActiveCfg = Release|Win32
-		{2AEA478E-D236-4160-B30C-6C1404309697}.Release|Win32.Build.0 = Release|Win32
-		{2AEA478E-D236-4160-B30C-6C1404309697}.Release|x64.ActiveCfg = Release|x64
-		{2AEA478E-D236-4160-B30C-6C1404309697}.Release|x64.Build.0 = Release|x64
+		{AE262866-D16D-4177-82EB-337A68EE5922}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AE262866-D16D-4177-82EB-337A68EE5922}.Debug|Win32.Build.0 = Debug|Win32
+		{AE262866-D16D-4177-82EB-337A68EE5922}.Debug|x64.ActiveCfg = Debug|x64
+		{AE262866-D16D-4177-82EB-337A68EE5922}.Debug|x64.Build.0 = Debug|x64
+		{AE262866-D16D-4177-82EB-337A68EE5922}.Release|Win32.ActiveCfg = Release|Win32
+		{AE262866-D16D-4177-82EB-337A68EE5922}.Release|Win32.Build.0 = Release|Win32
+		{AE262866-D16D-4177-82EB-337A68EE5922}.Release|x64.ActiveCfg = Release|x64
+		{AE262866-D16D-4177-82EB-337A68EE5922}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

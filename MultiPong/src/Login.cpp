@@ -29,7 +29,7 @@ Login::Login(sf::Font & font, bool & LoginSuccessful, sf::RenderWindow & Window)
 	window.setView(window.getDefaultView());
 	for (int i = 0; i < texts.size(); i++)
 	{
-		texts[i].setPosition(window.getSize() / 2.0f + sf::Vector2f(0, 30) * (i - 1));
+		texts[i].setPosition(window.getSize() / 2.0f + sf::Vector2f(0, 30) * (float)(i - 1));
 		texts[i].setOrigin(texts[i].getLocalBounds().width / 2, texts[i].getLocalBounds().height / 2);
 	}
 
@@ -94,7 +94,7 @@ void Login::Input(sf::Uint32 c)
 	{
 		if (active)
 		{
-			texts[i].setPosition(window.getSize() / 2.0f + sf::Vector2f(0, 30) * (i - 1));
+			texts[i].setPosition(window.getSize() / 2.0f + sf::Vector2f(0, 30) * (float)(i - 1));
 			texts[i].setOrigin(texts[i].getLocalBounds().width / 2, texts[i].getLocalBounds().height / 2);
 		}
 		else

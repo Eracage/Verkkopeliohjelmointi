@@ -1,4 +1,6 @@
 #pragma once
+#ifndef MESSAGES_H
+#define MESSAGES_H
 
 #include "util.h"
 
@@ -14,14 +16,15 @@ class TimeMessage : Message<TimeMessage>
 {
 public:
 	TimeMessage();
-	TimeMessage(float Time);
+	TimeMessage(int Time);
 	~TimeMessage();
 
 	const uint32_t type = 0;
-	float time;
+	int time;
 
 	// Inherited via Message
 	virtual char * Create() override;
 	virtual TimeMessage Receive(char *) override;
 };
 
+#endif

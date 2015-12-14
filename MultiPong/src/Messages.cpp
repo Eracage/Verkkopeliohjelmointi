@@ -7,7 +7,7 @@ TimeMessage::TimeMessage()
 {
 }
 
-TimeMessage::TimeMessage(float Time)
+TimeMessage::TimeMessage(int Time)
 	: time(Time)
 {
 }

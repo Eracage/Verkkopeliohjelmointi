@@ -1,4 +1,7 @@
 #pragma once
+#ifndef LOGIN_H
+#define LOGIN_H
+
 
 #include <vector>
 #include <SFML/Graphics.hpp>
@@ -39,3 +42,4 @@ private:
 	bool NAMECheck();
 };
 
+#endif

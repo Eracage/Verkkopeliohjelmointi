@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef XVEC_H
+#define XVEC_H
+
 #include <vector>
 
 template<typename T, unsigned int SIZE>
@@ -57,3 +60,4 @@ public:
 
 };
 
+#endif

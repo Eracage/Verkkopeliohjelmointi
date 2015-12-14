@@ -1,4 +1,6 @@
 #pragma once
+#ifndef PADDLE_H
+#define PADDLE_H
 
 #include <SFML/Graphics.hpp>
 
@@ -27,3 +29,4 @@ public:
 	float Width;
 };
 
+#endif
