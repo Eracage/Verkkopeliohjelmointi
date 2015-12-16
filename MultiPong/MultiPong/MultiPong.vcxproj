@@ -161,6 +161,7 @@
     <ClCompile Include="..\src\Paddle.cpp" />
     <ClCompile Include="..\src\Regexer.cpp" />
     <ClCompile Include="..\src\Server.cpp" />
+    <ClCompile Include="..\src\util.cpp" />
     <ClCompile Include="..\src\World.cpp" />
     <ClCompile Include="..\src\WorldBall.cpp" />
     <ClCompile Include="..\src\WorldPlayer.cpp" />

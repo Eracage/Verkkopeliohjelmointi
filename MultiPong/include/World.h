@@ -10,6 +10,8 @@
 
 struct PlayerInfo
 {
+	float degrees;
+	int ID;
 	sf::Vector2f WallRight;
 	sf::Vector2f WallLeft;
 	sf::Vector2f PaddleRight;

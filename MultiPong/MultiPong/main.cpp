@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 	sf::Int32 dt = 10;
 	sf::Int32 runtime = 0;
 
-	sf::RenderWindow window(sf::VideoMode(1280, 800), "MultiPong by Eracage!", sf::Style::Titlebar | sf::Style::Close);
+	sf::RenderWindow window(sf::VideoMode(1280, 800), "MultiPong by Eracage!", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
 
 	sf::Font font;
 	font.loadFromFile("comicbd.ttf");
@@ -121,13 +121,13 @@ int main(int argc, char* argv[])
 
 			window.display();
 		//}
-			frames++;
+			//frames++;
 
-			if (runtime % 1000 == 0)
-			{
-				std::cout << runtime / 1000 << " : " << frames << std::endl;
-				frames = 0;
-			}
+			//if (runtime % 1000 == 0)
+			//{
+			//	std::cout << runtime / 1000 << " : " << frames << std::endl;
+			//	frames = 0;
+			//}
 
 
 		//if ((std::chrono::high_resolution_clock::now() - start) >

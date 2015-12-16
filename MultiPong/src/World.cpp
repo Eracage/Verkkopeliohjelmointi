@@ -35,15 +35,43 @@ void World::CollisionCheck()
 
 	for (size_t i = 0; i < b.size(); i++)
 	{
-		for (size_t j = i; j < b.size(); j++)
-		{
+		auto pos = b[i].Position;
+		auto rad = b[i].radius;
 
+		auto bvel = v2fMagnitude(balls[i].pos[1]);
+		if (bvel > 0.8f)
+		{
+			balls[i].pos[1] = balls[i].pos[1] * (0.1f / bvel);
+		}
+
+		for (size_t j = i + 1; j < b.size(); j++)
+		{
+			auto pos2 = b[j].Position;
+			auto rad2 = b[j].radius;
+
+			auto ab = pos2 - pos;
+			auto over = (rad + rad2) - v2fMagnitude(ab);
+
+			if (over > 0)
+			{
+				auto overlap = ab*(over / v2fMagnitude(ab)) * 1.001f;
+
+				auto combVel = (balls[i].pos[1] + balls[j].pos[1]) * 0.5f;
+
+				auto velChange = ab*(sfdot(balls[i].pos[1], ab) / sfdot(ab, ab));
+				balls[i].pos[0] -= overlap;
+				balls[i].pos[1] -= velChange;
+
+				balls[j].pos[0] += overlap;
+				balls[j].pos[1] += velChange;
+			}
 		}
 
 		for (size_t j = 0; j < p.size(); j++)
 		{
 
 		}
+
 		if (v2fMagnitude(b[i].Position) > 200)
 		{
 			balls[i].pos[1] = -balls[i].pos[1];
@@ -119,8 +147,12 @@ std::vector<PlayerInfo> World::GetPlayerInfo()
 			const int C = i - deadCount;
 
 			PlayerInfo info;
-			info.WallRight = CirclePos(perPlayer * C - perPlayer * playerArea / 2) * 200.0f;
-			info.WallLeft = CirclePos(perPlayer * C + perPlayer * playerArea / 2) * 200.0f;
+
+			info.ID = i;
+			info.degrees = perPlayer * C;
+
+			info.WallRight = CirclePos(info.degrees - perPlayer * playerArea / 2) * 200.0f;
+			info.WallLeft = CirclePos(info.degrees + perPlayer * playerArea / 2) * 200.0f;
 
 			info.PaddleRight = info.WallRight +
 				(info.WallLeft - info.WallRight) *
@@ -150,7 +182,7 @@ std::vector<BallInfo> World::GetBallInfo()
 
 		info.Position = ballPos[i];
 		info.BallColor = sf::Color(balls[i].color);
-		info.radius = 50.0f / (5.0f + balls.size());
+		info.radius = 500.0f / (50.0f + balls.size());
 
 		retVal.push_back(info);
 	}
@@ -167,7 +199,16 @@ void World::AddPlayer(int curTime)
 	p.time = curTime;
 	players.push_back(p);
 
-	if (std::sqrt(players.size() + 0.1f) > balls.size() + 1.0f)
+	int playersAlive = 0;
+	for (size_t i = 0; i < players.size(); i++)
+	{
+		if (players[i].leaveTime == 0)
+		{
+			playersAlive++;
+		}
+	}
+
+	//if (std::sqrt(playersAlive - 0.1f) > balls.size() + 1.0f)
 		AddBall(curTime);
 }
 
@@ -176,7 +217,7 @@ void World::AddBall(int curTime)
 	WorldBall b;
 	b.color = sf::Color(rand() % 255, rand() % 255, rand() % 255, 255).toInteger();
 	b.pos[0] = sf::Vector2f(0, 0);
-	b.pos[1] = CirclePos(rand());
+	b.pos[1] = CirclePos(rand()) * (((100 + rand() % 500) / 5000.0f));
 	b.pos[2] = sf::Vector2f(0, 0);
 	b.time = curTime;
 	balls.push_back(b);

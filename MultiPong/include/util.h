@@ -29,12 +29,8 @@ T clamp(T val, T min, T max)
 	return std::max(min, std::min(val, max));
 }
 
-static sf::Vector2f CirclePos(float degrees)
-{
-	float rad = degrees * 3.14159265f / 180.0f;
-	float x = std::cos(rad);
-	float y = std::sin(rad);
-	return sf::Vector2f(x, y);
-}
+sf::Vector2f CirclePos(float degrees);
+
+float sfdot(sf::Vector2f a, sf::Vector2f b);
 
 #endif

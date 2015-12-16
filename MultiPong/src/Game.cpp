@@ -37,6 +37,9 @@ void Game::Update(sf::RenderWindow & window)
 		players[i].SetPoints(pInfos[i].PaddleRight, pInfos[i].PaddleLeft);
 		players[i].SetColor(pInfos[i].PlayerColor);
 
+		if (pInfos[i].ID == ID)
+			view.setRotation(pInfos[i].degrees - 90);
+
 		walls[i].SetColor(wallColor);
 		walls[i].SetPoints(pInfos[(i + 1) % playerCount].WallRight, pInfos[i].WallLeft);
 	}
