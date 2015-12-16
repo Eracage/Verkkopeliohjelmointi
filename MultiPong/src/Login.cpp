@@ -27,7 +27,7 @@ Login::Login(sf::Font & font, bool & LoginSuccessful, sf::RenderWindow & Window)
 	}
 
 	window.setView(window.getDefaultView());
-	for (int i = 0; i < texts.size(); i++)
+	for (size_t i = 0; i < texts.size(); i++)
 	{
 		texts[i].setPosition(window.getSize() / 2.0f + sf::Vector2f(0, 30) * (float)(i - 1));
 		texts[i].setOrigin(texts[i].getLocalBounds().width / 2, texts[i].getLocalBounds().height / 2);
@@ -58,7 +58,7 @@ void Login::Draw()
 		window.draw(box);
 	}
 
-	for (int i = 0; i < texts.size(); i++)
+	for (size_t i = 0; i < texts.size(); i++)
 	{
 		window.draw(texts[i]);
 	}
@@ -90,7 +90,7 @@ void Login::Input(sf::Uint32 c)
 		texts[field].setString(texts[field].getString() + c);
 
 	window.setView(window.getDefaultView());
-	for (int i = 0; i < texts.size(); i++)
+	for (size_t i = 0; i < texts.size(); i++)
 	{
 		if (active)
 		{
@@ -102,7 +102,7 @@ void Login::Input(sf::Uint32 c)
 			static int z = 0;
 			texts[i].setCharacterSize(16);
 			texts[i].setOrigin(0, 0);
-			texts[i].setPosition(5, 5 + 30 * i);
+			texts[i].setPosition(5.0f, 5.0f + 30.0f * i);
 		}
 	}
 }
@@ -134,7 +134,7 @@ bool Login::Check()
 	//	break;
 	//}
 
-	for (int i = 0; i < texts.size(); i++)
+	for (size_t i = 0; i < texts.size(); i++)
 	{
 		if (texts[i].getString().getSize() <= sizes[i])
 		{

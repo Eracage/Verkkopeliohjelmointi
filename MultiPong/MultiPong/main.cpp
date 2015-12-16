@@ -14,29 +14,49 @@
 #include <util.h>
 
 #include <NetworkFunctions.h>
+#include <Client.h>
 
 #include <iostream>
 
 int main(int argc, char* argv[])
 {
-	Client server;
-	Client remote;
-	sf::Int64 PingSum = 0;
-	sf::Int32 PingCount = 1;
-	sf::Int32 Ping = 0;
-	sf::Int32 ServerTimeDif = 0;
+	int frames = 0;
+	for (size_t i = 0; i < argc; i++)
+	{
+		std::cout << argv[i] << std::endl;
+	}
+	std::cout << std::endl;
 
-	sf::Int32 LastWorldRuntime = 0;
-	sf::Int32 ownWorldRuntime = 0;
+	World world;
 
-	server.name = "ClientName";
+	Client client(world);
 
-	std::string portString = regexArgPort(argc, argv, 0, "12345");
-	std::string ipString = regexArgIP(argc, argv, 0, "localhost");
-	std::string ownPortString = regexArgPort(argc, argv, 2, "27001");
+	std::string ipString = "localhost";
+	std::string portString = "27012";
+	std::string ownPortString = "";
+	std::string ownName = "Client";
 
-	server.port = std::stoi(portString);
-	server.address = sf::IpAddress(ipString);
+	switch (argc)
+	{
+	default:
+	case 4:
+		ownPortString = argv[3];
+	case 3:
+		portString = argv[2];
+	case 2:
+		ipString = argv[1];
+	case 1:
+		//ownName = argv[0];
+	case 0:
+		break;
+	}
+
+	if (!client.Connect(ipString, portString, ownPortString, ownName))
+	{
+		return -1;
+	}
+
+	std::cout << "Connected to " << client.server.address << ":" << client.server.port << std::endl;
 
 	auto start = std::chrono::high_resolution_clock::now();
 
@@ -48,74 +68,9 @@ int main(int argc, char* argv[])
 	sf::Font font;
 	font.loadFromFile("comicbd.ttf");
 
-	sf::UdpSocket socket;
-	socket.setBlocking(false);
+	Game game(font, world);
 
-
-	//if (socket.bind(std::stoi(ownPortString)) != sf::Socket::Done)
-		if (socket.bind(sf::Socket::AnyPort) != sf::Socket::Done)
-			std::cout << "error: socket.bind" << std::endl;
-
-	sf::Packet packet;
-
-	MakeConnectPacket(packet, server.name);
-
-	if (socket.send(packet, server.address, server.port) != sf::Socket::Done)
-		std::cout << "error: socket.send" << std::endl;
-
-	// useful delay
-	World world;
-	World ownWorld;
-
-	Game game(font, world, ownWorld);
-
-	int c = 1;
-	//std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-	packet.clear();
-	while (socket.receive(packet, remote.address, remote.port) == sf::Socket::NotReady)
-	{
-		if (c % 50)
-		{
-			std::cout << "Connecting..." << std::endl;
-			if (socket.send(packet, server.address, server.port) != sf::Socket::Done)
-				std::cout << "error: socket.send" << std::endl;
-		}
-		
-		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-		c++;
-	}
-
-	sf::Uint32 pType;
-	packet >> pType;
-
-	switch (pType)
-	{
-	case 7:
-	{
-		sf::Uint32 ID;
-		sf::Int32 rTime;
-
-		packet >> rTime;
-		packet >> ID;
-		packet.clear();
-
-		while ((std::chrono::high_resolution_clock::now() - start) >
-			std::chrono::milliseconds(runtime + dt))
-		{
-			runtime += dt;
-		}
-
-		ServerTimeDif = rTime - runtime;
-		server.ID = ID;
-	}
-		break;
-	default:
-		std::cout << "error: unexpected packet type" << std::endl;
-		break;
-	}
-
-	game.ID = server.ID;
-
+	game.ID = client.ownData.ID;
 
 	//bool loginActive = true;
 
@@ -141,117 +96,57 @@ int main(int argc, char* argv[])
 			}
 		}
 
-		int m = 0;
-		const int maxM = 10000;
 
-		packet.clear();
-		while (socket.receive(packet, server.address, server.port) != sf::Socket::NotReady
-			&& m < maxM)
-		{
-			packet >> pType;
-			switch (pType)
-			{
-			case 5:
-			{
-				sf::Int32 runtime;
-				sf::Uint32 bSize;
-				sf::Uint32 pSize;
+		for (size_t i = 0; client.Receive(runtime) && i < 10000; i++);
 
-				packet >> runtime;
-
-				if (LastWorldRuntime > runtime)
-					break;
-
-				packet >> server.ping;
-
-				packet >> bSize;
-				for (int i = 0; i < bSize; i++)
-				{
-					if (i < world.balls.size())
-					{
-						packet >> world.balls[i];
-					}
-					else
-					{
-						WorldBall b;
-						packet >> b;
-						world.balls.push_back(b);
-						ownWorld.balls.push_back(b);
-					}
-				}
-
-				packet >> pSize;
-				for (int i = 0; i < pSize; i++)
-				{
-					if (i < world.players.size())
-					{
-					packet >> world.players[i];
-					}
-					else
-					{
-						WorldPlayer p;
-						packet >> p;
-						world.players.push_back(p);
-						ownWorld.players.push_back(p);
-					}
-				}
-				ownWorldRuntime = LastWorldRuntime = runtime;
-
-				PingSum += server.ping;
-				PingCount++;
-				packet.clear();
-			}
-				break;
-			case 7:
-				packet.clear();
-				break;
-			default:
-				std::cout << "error: unexpected packet type" << std::endl;
-				break;
-			}
-			m++;
-		}
-
-		//login.Update();
+		while (world.runTime < runtime + client.ServerTimeDif + client.ownData.ping)
+			world.Update(dt);
 
 
-		while ((std::chrono::high_resolution_clock::now() - start) >
-			std::chrono::milliseconds(runtime + dt))
-		{
+		auto dif = (std::chrono::high_resolution_clock::now() - start) - std::chrono::milliseconds(runtime + dt);
+		std::this_thread::sleep_until(std::chrono::high_resolution_clock::now() - dif);
+		//if (dif > std::chrono::milliseconds(dt))
+		//{
 			runtime += dt;
 
-			sf::Int32 avPing;
-
-			avPing = PingSum / PingCount / 2;
-			
-			while (avPing > server.ping)
-			{
-				PingCount = PingCount * 3 / 2;
-				avPing = PingSum / PingCount / 2;
-			}
-
-			sf::Int32 serverTime = runtime + ServerTimeDif + avPing;
-			while (ownWorldRuntime < serverTime)
-			{
-				ownWorldRuntime += dt;
-				ownWorld.Update(dt);
-			}
-
 			game.Update(window);
-		}
 
-		packet.clear();
-		MakePlayerUpdatePacket(packet, ownWorld.players[server.ID]);
-		socket.send(packet, server.address, server.port);
-		packet.clear();
+			client.Update();
 
-		window.clear();
+			window.clear();
 
-		game.Draw(window);
+			game.Draw(window);
 
-		//login.Draw();
+			//login.Draw();
 
-		window.display();
+			window.display();
+		//}
+			frames++;
+
+			if (runtime % 1000 == 0)
+			{
+				std::cout << runtime / 1000 << " : " << frames << std::endl;
+				frames = 0;
+			}
+
+
+		//if ((std::chrono::high_resolution_clock::now() - start) >
+		//	std::chrono::milliseconds(runtime + dt))
+		//{
+		//	runtime += dt;
+
+		//	game.Update(window);
+
+		//	client.Update();
+
+		//	window.clear();
+
+		//	game.Draw(window);
+
+		//	//login.Draw();
+
+		//	window.display();
+		//}
 	}
 
 	return 0;

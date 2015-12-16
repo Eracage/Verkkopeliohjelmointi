@@ -13,7 +13,7 @@
 class Game
 {
 public:
-	Game(sf::Font & font, World & w1, World & ow);
+	Game(sf::Font & font, World & world);
 	~Game();
 
 	void Update(sf::RenderWindow & window);
@@ -22,7 +22,9 @@ public:
 	sf::View view;
 
 	World & world;
-	World & ownWorld;
+
+	int playerCount;
+	int ballCount;
 
 	std::vector<Paddle> walls;
 	std::vector<Paddle> players;

@@ -12,7 +12,7 @@ Paddle::Paddle(sf::Font & font, float length, float width, sf::String namep)
 	Width(width),
 	name(namep,font)
 {
-	SetWidht(width);
+	SetWidth(width);
 	SetColor(sf::Color::White);
 }
 
@@ -20,7 +20,7 @@ Paddle::~Paddle()
 {
 }
 
-void Paddle::SetWidht(float width)
+void Paddle::SetWidth(float width)
 {
 	Width = width;
 	for (int i = 0; i < 2; i++)
@@ -58,7 +58,7 @@ void Paddle::SetPoints(sf::Vector2f start, sf::Vector2f end)
 	rectangle.setSize(sf::Vector2f(Length, rectangle.getSize().y));
 	rectangle.setOrigin(rectangle.getSize() / 2);
 
-	const float rot = std::atan2(vec.y, vec.x) * 180 / 3.14159265;
+	const float rot = std::atan2(vec.y, vec.x) * 180 / 3.14159265f;
 	name.setRotation(rot);
 	name.setPosition(start + vec / 2);
 	rectangle.setRotation(rot);

@@ -13,7 +13,7 @@ public:
 
 	~Paddle();
 
-	void SetWidht(float width);
+	void SetWidth(float width);
 
 	void SetColor(sf::Color color);
 

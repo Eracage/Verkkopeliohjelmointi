@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Client.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Login.cpp" />
     <ClCompile Include="..\src\MessageCreator.cpp" />
@@ -159,12 +160,14 @@
     <ClCompile Include="..\src\NetworkFunctions.cpp" />
     <ClCompile Include="..\src\Paddle.cpp" />
     <ClCompile Include="..\src\Regexer.cpp" />
+    <ClCompile Include="..\src\Server.cpp" />
     <ClCompile Include="..\src\World.cpp" />
     <ClCompile Include="..\src\WorldBall.cpp" />
     <ClCompile Include="..\src\WorldPlayer.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\Client.h" />
     <ClInclude Include="..\include\Game.h" />
     <ClInclude Include="..\include\Login.h" />
     <ClInclude Include="..\include\MessageCreator.h" />
@@ -172,6 +175,7 @@
     <ClInclude Include="..\include\NetworkFunctions.h" />
     <ClInclude Include="..\include\Paddle.h" />
     <ClInclude Include="..\include\Regexer.h" />
+    <ClInclude Include="..\include\Server.h" />
     <ClInclude Include="..\include\util.h" />
     <ClInclude Include="..\include\World.h" />
     <ClInclude Include="..\include\WorldBall.h" />

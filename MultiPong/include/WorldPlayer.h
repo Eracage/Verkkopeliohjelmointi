@@ -16,9 +16,9 @@ public:
 
 	sf::Uint32 ID;
 	sf::Uint32 color;
-	int time;
-	float joinTime;
-	float leaveTime;
+	sf::Int32 time;
+	sf::Int32 joinTime;
+	sf::Int32 leaveTime;
 };
 
 sf::Packet& operator <<(sf::Packet& packet, const WorldPlayer& player);
