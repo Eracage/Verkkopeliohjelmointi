@@ -1,13 +1,11 @@
 #include <Game.h>
 #include <util.h>
+#include <iostream>
 
-bool serverWorld = true;
-
-Game::Game(sf::Font & fnt, World & w1, World & ow)
+Game::Game(sf::Font & fnt, World & w)
 	: view(sf::FloatRect(-400, -400, 800, 800)),
 	font(fnt),
-	world(w1),
-	ownWorld(ow)
+	world(w)
 {
 	//paddles.push_back(Paddle(font));
 	view.setViewport(sf::FloatRect(0, 0, 0.625f, 1));
@@ -22,97 +20,77 @@ void Game::Update(sf::RenderWindow & window)
 {
 	window.setView(view);
 
-	World & w = serverWorld ? world : ownWorld;
+	auto pInfos = world.GetPlayerInfo();
 
-	int playersAlive = 0;
-	for (int i = 0; i < w.players.size(); i++)
+	playerCount = pInfos.size();
+
+	sf::Color wallColor = sf::Color::Blue;
+
+	while (players.size() < playerCount)
 	{
-		if (w.players[i].leaveTime < 1)
-		{
-			playersAlive++;
-		}
+		players.push_back(Paddle(font));
+		walls.push_back(Paddle(font));
 	}
 
-	if (playersAlive > 1)
+	for (int i = 0; i < playerCount; i++)
 	{
+		players[i].SetPoints(pInfos[i].PaddleRight, pInfos[i].PaddleLeft);
+		players[i].SetColor(pInfos[i].PlayerColor);
 
-		while (players.size() < playersAlive)
-		{
-			players.push_back(Paddle(font));
-			walls.push_back(Paddle(font));
-		}
-		while (balls.size() < w.balls.size())
-		{
-			balls.push_back(Paddle(font));
-		}
-
-		float degrees = 360;
-
-		float perPlayer = degrees / playersAlive;
-
-		float playerWall = 1 / playersAlive;
-
-		float playerArea = 1.0f - playerWall;
-
-		float hlfp = 0.125f;
-
-		sf::Vector2f start;
-		sf::Vector2f end;
-
-		sf::Vector2f pStart;
-		sf::Vector2f pEnd;
-
-		sf::Color wallColor = sf::Color::White;
-
-		int size = w.players.size();
-
-		// gotta do 1 extra
-		for (int i = 0; i <= size; i++)
-		{
-			start = CirclePos(perPlayer * i + perPlayer * playerArea);
-			// gotta be here
-			walls[i%size].SetPoints(end, start);
-			// in between
-			end = CirclePos(perPlayer * i + perPlayer * playerArea);
-
-			pStart = start + (end - start) * (w.players[i%size].pos[0] + hlfp);
-			pEnd = start + (end - start) * (w.players[i%size].pos[0] - hlfp);
-
-			players[i%size].SetPoints(pStart, pEnd);
-			players[i%size].SetColor(sf::Color(w.players[i%size].color));
-
-			walls[i%size].SetColor(wallColor);
-		}
-
-		size = balls.size();
-
-		for (int i = 0; i < size; i++)
-		{
-			balls[i].SetPoints(w.balls[i].pos[0], w.balls[i].pos[0]);
-			balls[i].SetColor(sf::Color(w.balls[i].color));
-		}
+		walls[i].SetColor(wallColor);
+		walls[i].SetPoints(pInfos[(i + 1) % playerCount].WallRight, pInfos[i].WallLeft);
 	}
 
+	auto bInfos = world.GetBallInfo();
 
-	//sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
-	//sf::Vector2f mousePos = window.mapPixelToCoords(pixelPos);
-	//paddles[0].SetPoints(sf::Vector2f(0, 0), mousePos);
+	ballCount = world.balls.size();
+
+	while (balls.size() < ballCount)
+	{
+		balls.push_back(Paddle(font));
+	}
+
+	for (int i = 0; i < ballCount; i++)
+	{
+		balls[i].SetPoints(bInfos[i].Position, bInfos[i].Position);
+		balls[i].SetColor(bInfos[i].BallColor);
+		balls[i].SetWidth(bInfos[i].radius);
+	}
+
+	if (window.hasFocus() && world.players.size() > ID)
+	{
+		int dir =
+			(sf::Keyboard::isKeyPressed(sf::Keyboard::S) |
+				sf::Keyboard::isKeyPressed(sf::Keyboard::A) |
+				sf::Keyboard::isKeyPressed(sf::Keyboard::Down) |
+				sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) -
+			(sf::Keyboard::isKeyPressed(sf::Keyboard::W) |
+				sf::Keyboard::isKeyPressed(sf::Keyboard::D) |
+				sf::Keyboard::isKeyPressed(sf::Keyboard::Up) |
+				sf::Keyboard::isKeyPressed(sf::Keyboard::Right));
+
+		world.players[ID].pos[1] = dir * 0.001f;
+		world.players[ID].pos[0] = world.PlayerPos(ID, world.runTime);
+		world.players[ID].pos[1] = 0;
+		world.players[ID].time = world.runTime;
+		//std::cout << world.players[ID].pos[0] << " : " << world.players[ID].pos[1] << std::endl;
+	}
 }
 
 void Game::Draw(sf::RenderWindow & window)
 {
 	window.setView(view);
 
-	for each (Paddle wall in walls)
+	for (size_t i = 0; i < playerCount; i++)
 	{
-		wall.Draw(window);
+		walls[i].Draw(window);
 	}
-	for each (Paddle player in players)
+	for (size_t i = 0; i < playerCount; i++)
 	{
-		player.Draw(window);
+		players[i].Draw(window);
 	}
-	for each (Paddle ball in balls)
+	for (size_t i = 0; i < ballCount; i++)
 	{
-		ball.Draw(window);
+		balls[i].Draw(window);
 	}
 }

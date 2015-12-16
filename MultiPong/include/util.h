@@ -32,8 +32,8 @@ T clamp(T val, T min, T max)
 static sf::Vector2f CirclePos(float degrees)
 {
 	float rad = degrees * 3.14159265f / 180.0f;
-	float x = cos(rad);
-	float y = sin(rad);
+	float x = std::cos(rad);
+	float y = std::sin(rad);
 	return sf::Vector2f(x, y);
 }
 
